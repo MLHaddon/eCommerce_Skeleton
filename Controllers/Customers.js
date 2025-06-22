@@ -3,7 +3,7 @@ import Customers from "../models/customerModel.js";
 export const getCustomers = async (req, res) => {
   try {
     const customers = await Customers.findAll({
-      attributes: ['id', 'firstName', 'lastName', 'email', 'address', 'lastLogin', 'ipHistory', 'totalOrders', 'totalSpent']
+      attributes: ['id', 'firstName', 'lastName', 'email', 'address', 'cartItems', 'lastLogin', 'ipHistory', 'totalOrders', 'totalSpent']
     });
     res.json(customers);
   } catch (error) {
@@ -16,7 +16,7 @@ export const getCustomer = async (req, res) => {
   try {
     const customer = await Customers.findOne({
       where: { id: req.params.id },
-      attributes: ['id', 'firstName', 'lastName', 'email', 'address', 'lastLogin', 'ipHistory', 'totalOrders', 'totalSpent']
+      attributes: ['id', 'firstName', 'lastName', 'email', 'address', 'cartItems', 'lastLogin', 'ipHistory', 'totalOrders', 'totalSpent']
     });
     if (!customer) return res.status(404).json({ message: "Customer not found" });
     res.json(customer);
@@ -27,7 +27,7 @@ export const getCustomer = async (req, res) => {
 };
 
 export const createCustomer = async (req, res) => {
-  const { firstName, lastName, email, address, lastLogin, ipHistory, totalOrders, totalSpent } = req.body;
+  const { firstName, lastName, email, address, cartItems, lastLogin, ipHistory, totalOrders, totalSpent } = req.body;
 
   try {
     const customer = await Customers.create({
@@ -35,6 +35,7 @@ export const createCustomer = async (req, res) => {
       lastName,
       email,
       address,
+      cartItems,
       lastLogin,
       ipHistory,
       totalOrders,
@@ -53,15 +54,16 @@ export const updateCustomer = async (req, res) => {
   try {
     const customer = await Customers.findOne({
       where: { id: req.body.id },
-      attributes: ['id', 'firstName', 'lastName', 'email', 'address', 'lastLogin', 'ipHistory', 'totalOrders', 'totalSpent']
+      attributes: ['id', 'firstName', 'lastName', 'email', 'address', 'cartItems', 'lastLogin', 'ipHistory', 'totalOrders', 'totalSpent']
     });
     if (!customer) return res.status(404).json({ message: "Customer not found" });
-    const { firstName, lastName, email, address, lastLogin, ipHistory, totalOrders, totalSpent } = req.body;
+    const { firstName, lastName, email, address, cartItems, lastLogin, ipHistory, totalOrders, totalSpent } = req.body;
     const updatedCustomer = await Customers.update({
       firstName,
       lastName,
       email,
       address,
+      cartItems,
       lastLogin,
       ipHistory,
       totalOrders,

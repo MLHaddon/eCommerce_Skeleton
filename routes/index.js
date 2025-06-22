@@ -4,6 +4,8 @@ import { getMostRecentProducts, updateProducts, getAllProducts } from '../contro
 import { getCustomer, getCustomers, createCustomer, updateCustomer } from '../controllers/Customers.js';
 import { getTransactions, getTransaction, createTransaction, updateTransaction } from '../controllers/Transactions.js';
 import { getOrders, getOrder, createOrder, updateOrder, deleteOrder } from '../Controllers/Orders.js';
+import { updateCartItems, deleteCartItem } from '../Controllers/Cart.js';
+import { initializeSquareClient, getPayment, updatePayment, cancelPayment, completePayment, createPayment, refundPayment, listPayments } from '../middleware/SquareAPI.js';
 import { refreshToken } from '../controllers/RefreshToken.js';
 import { verifyToken } from '../middleware/VerifyToken.js';
 
@@ -39,8 +41,18 @@ router.get('/orders/get/:id', getOrder);
 router.post('/orders/create', createOrder);
 router.put('/orders/update', updateOrder);
 router.delete('/orders/delete/:id', deleteOrder);
-
-// TEST Middleware tests
+  // Cart updates
+router.delete('/cart/delete/:id', deleteCartItem);
+router.post('/cart/update', updateCartItems);
+  //  API Routes
+router.post('/payments', createPayment);
+router.get('/payments/:paymentId', getPayment);
+router.put('/payments/:paymentId', updatePayment);
+router.delete('/payments/:paymentId', cancelPayment);
+router.post('/payments/:paymentId/complete', completePayment);
+router.post('/payments/:paymentId/refund', refundPayment);
+router.get('/payments', listPayments);
+router.get('/initialize', initializeSquareClient);
 
 
 export default router;

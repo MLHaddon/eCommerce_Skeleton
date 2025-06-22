@@ -16,6 +16,9 @@ const Customers = db.define('customers', {
   address: {
     type: DataTypes.STRING
   },
+  cartItems: {
+    type: DataTypes.JSON
+  },
   lastLogin: {
     type: DataTypes.STRING
   },
