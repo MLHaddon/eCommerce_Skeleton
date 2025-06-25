@@ -1,12 +1,13 @@
 import express from 'express';
-import { getUsers, getUser, Register, Login, Logout } from '../controllers/Users.js';
-import { getMostRecentProducts, updateProducts, getAllProducts } from '../controllers/Products.js';
-import { getCustomer, getCustomers, createCustomer, updateCustomer } from '../controllers/Customers.js';
-import { getTransactions, getTransaction, createTransaction, updateTransaction } from '../controllers/Transactions.js';
+import { getUsers, getUser, Register, Login, Logout } from '../Controllers/Users.js';
+import { createProduct, deleteProduct, getProduct, updateProduct, getProducts } from '../Controllers/Products.js';
+import { getCustomer, getCustomers, createCustomer, updateCustomer, deleteCustomer } from '../Controllers/Customers.js';
+import { getTransactions, getTransaction, createTransaction, updateTransaction, deleteTransaction } from '../Controllers/Transactions.js';
 import { getOrders, getOrder, createOrder, updateOrder, deleteOrder } from '../Controllers/Orders.js';
 import { updateCartItems, deleteCartItem } from '../Controllers/Cart.js';
+import { getIpHistory, getIpHistories, createIpHistory, updateIpHistory, deleteIpHistory } from '../Controllers/IpHistory.js';
 import { initializeSquareClient, getPayment, updatePayment, cancelPayment, completePayment, createPayment, refundPayment, listPayments } from '../middleware/SquareAPI.js';
-import { refreshToken } from '../controllers/RefreshToken.js';
+import { refreshToken } from '../Controllers/RefreshToken.js';
 import { verifyToken } from '../middleware/VerifyToken.js';
 
 const router = express.Router();
@@ -21,30 +22,58 @@ router.get('/token', refreshToken);
 router.get('/verify-token', verifyToken, (req, res) => res.sendStatus(200));
 
 // eCommerce Routes
-  // Products
-router.get('/products/get', getMostRecentProducts);
-router.get('/products/getallhistory', getAllProducts);
-router.put('/products/update', updateProducts);
-  // Customers
+// Products
+router.get('/products/get/:id', getProduct);
+router.get('/products/getallhistory', getProducts);
+router.put('/products/update/:id', updateProduct);
+router.post('/products/create', createProduct);
+router.delete('/products/delete/:id', deleteProduct);
+
+// Product Reviews (these routes need to be added to your Products controller)
+router.post('/products/:id/reviews', async (req, res) => {
+  // This would need to be implemented in Products.js
+  res.status(501).json({ message: "Review endpoints not yet implemented" });
+});
+router.put('/products/:id/reviews/:reviewId', async (req, res) => {
+  res.status(501).json({ message: "Review endpoints not yet implemented" });
+});
+router.delete('/products/:id/reviews/:reviewId', async (req, res) => {
+  res.status(501).json({ message: "Review endpoints not yet implemented" });
+});
+
+// Customers
 router.get('/customers/get', getCustomers);
 router.get('/customers/get/:id', getCustomer);
 router.post('/customers/create', createCustomer);
-router.put('/customers/update', updateCustomer);
-  // Transactions
+router.put('/customers/update/:id', updateCustomer); // Fixed: added :id parameter
+router.delete('/customers/delete/:id', deleteCustomer); // Added missing delete route
+
+// Transactions
 router.get('/transactions/get', getTransactions);
 router.get('/transactions/get/:id', getTransaction);
 router.post('/transactions/create', createTransaction);
-router.put('/transactions/update', updateTransaction);
-  // Orders
+router.put('/transactions/update/:id', updateTransaction); // Fixed: added :id parameter
+router.delete('/transactions/delete/:id', deleteTransaction); // Added missing delete route
+
+// Orders
 router.get('/orders/get', getOrders);
 router.get('/orders/get/:id', getOrder);
 router.post('/orders/create', createOrder);
-router.put('/orders/update', updateOrder);
+router.put('/orders/update/:id', updateOrder); // Fixed: added :id parameter
 router.delete('/orders/delete/:id', deleteOrder);
-  // Cart updates
-router.delete('/cart/delete/:id', deleteCartItem);
-router.post('/cart/update', updateCartItems);
-  //  API Routes
+
+// Cart Management
+router.post('/cart/update/:id/:ipAddress', updateCartItems); // Fixed: added required parameters
+router.delete('/cart/delete/:id/:productId/:ipAddress', deleteCartItem); // Fixed: added required parameters
+
+// IP History Management
+router.get('/ip-history', getIpHistories);
+router.get('/ip-history/:id', getIpHistory);
+router.post('/ip-history/create', createIpHistory);
+router.put('/ip-history/update/:id', updateIpHistory);
+router.delete('/ip-history/delete/:id', deleteIpHistory);
+
+// Square Payment API Routes
 router.post('/payments', createPayment);
 router.get('/payments/:paymentId', getPayment);
 router.put('/payments/:paymentId', updatePayment);
@@ -52,7 +81,6 @@ router.delete('/payments/:paymentId', cancelPayment);
 router.post('/payments/:paymentId/complete', completePayment);
 router.post('/payments/:paymentId/refund', refundPayment);
 router.get('/payments', listPayments);
-router.get('/initialize', initializeSquareClient);
-
+router.get('/square/initialize', initializeSquareClient);
 
 export default router;

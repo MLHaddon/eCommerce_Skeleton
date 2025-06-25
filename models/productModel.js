@@ -4,35 +4,31 @@ import db from '../config/Database.js';
 // Access the Datatypes from sequelize
 const { DataTypes } = Sequelize;
 
-const Products = db.define('products', {
-  products_data: {
+const Product = db.define('products', {
+  name: {
+    type: DataTypes.STRING,
+  },
+  summary: {
+    type: DataTypes.STRING,
+  },
+  description: {
+    type: DataTypes.STRING,
+  },
+  reviews: {
     type: DataTypes.JSON
+  },
+  availability: {
+    type: DataTypes.INTEGER
+  },
+  price: {
+    type: DataTypes.FLOAT
+  },
+  category: {
+    type: DataTypes.JSON
+  },
+  product_img: {
+    type: DataTypes.STRING
   }
-  // name: {
-  //   type: DataTypes.STRING,
-  //   unique: true
-  // },
-  // summary: {
-  //   type: DataTypes.STRING,
-  //   unique: true
-  // },
-  // description: {
-  //   type: DataTypes.STRING,
-  //   unique: true
-  // },
-  // reviews: {
-  //   type: DataTypes.JSON
-  // },
-  // availability: {
-  //   type: DataTypes.INTEGER
-  // },
-  // price: {
-  //   type: DataTypes.FLOAT
-  // },
-  // category: {
-  //   type: DataTypes.STRING,
-  //   unique: true
-  // }
 }, {
   freezeTableName:true
 });
@@ -42,4 +38,4 @@ const Products = db.define('products', {
   await db.sync();
 })();
 
-export default Products;
+export default Product;

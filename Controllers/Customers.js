@@ -77,3 +77,20 @@ export const updateCustomer = async (req, res) => {
     res.status(500).json({ message: "Error updating customer", error });
   }
 };
+
+export const deleteCustomer = async (req, res) => {
+  try {
+    const customer = await Customers.findOne({
+      where: { id: req.params.id },
+      attributes: ['id', 'firstName', 'lastName', 'email', 'address', 'cartItems', 'lastLogin', 'ipHistory', 'totalOrders', 'totalSpent']
+    });
+    if (!customer) return res.status(404).json({ message: "Customer not found" });
+    await Customers.destroy({
+      where: { id: req.params.id }
+    });
+    res.status(200).json({ message: "Customer deleted successfully" });
+  } catch (error) {
+    console.error('Error in Customer deletion: ', error);
+    res.error(500).json ({message: "Internal Server Error Deleting Customer", error});
+  }
+};
