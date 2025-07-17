@@ -110,7 +110,7 @@ export const Login = async (req, res) => {
       sameSite: 'strict'
     });
 
-    res.json({ accessToken, userID: user.id, username: user.username });
+    res.status(200).json({message:"Login Successful", accessToken, userRes: user });
   } catch (error) {
     console.error('Error in Login:', error);
     res.status(500).json({ message: "Internal server error" });

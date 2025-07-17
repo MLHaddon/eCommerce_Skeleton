@@ -17,7 +17,9 @@ const Customers = db.define('customers', {
     type: DataTypes.STRING
   },
   cartItems: {
-    type: DataTypes.JSON
+    type: DataTypes.JSON, // or TEXT if you're storing as JSON string
+    allowNull: true,
+    defaultValue: []
   },
   lastLogin: {
     type: DataTypes.STRING

@@ -4,11 +4,12 @@ import { createProduct, deleteProduct, getProduct, updateProduct, getProducts } 
 import { getCustomer, getCustomers, createCustomer, updateCustomer, deleteCustomer } from '../Controllers/Customers.js';
 import { getTransactions, getTransaction, createTransaction, updateTransaction, deleteTransaction } from '../Controllers/Transactions.js';
 import { getOrders, getOrder, createOrder, updateOrder, deleteOrder } from '../Controllers/Orders.js';
-import { updateCartItems, deleteCartItem } from '../Controllers/Cart.js';
+import { updateCartItems, deleteCartItem, getCartItems } from '../Controllers/Cart.js';
 import { getIpHistory, getIpHistories, createIpHistory, updateIpHistory, deleteIpHistory } from '../Controllers/IpHistory.js';
 import { initializeSquareClient, getPayment, updatePayment, cancelPayment, completePayment, createPayment, refundPayment, listPayments } from '../middleware/SquareAPI.js';
 import { refreshToken } from '../Controllers/RefreshToken.js';
 import { verifyToken } from '../middleware/VerifyToken.js';
+
 
 const router = express.Router();
 
@@ -63,15 +64,16 @@ router.put('/orders/update/:id', updateOrder); // Fixed: added :id parameter
 router.delete('/orders/delete/:id', deleteOrder);
 
 // Cart Management
+router.get('/cart/get/:id/:ipAddress', getCartItems);
 router.post('/cart/update/:id/:ipAddress', updateCartItems); // Fixed: added required parameters
 router.delete('/cart/delete/:id/:productId/:ipAddress', deleteCartItem); // Fixed: added required parameters
 
 // IP History Management
 router.get('/ip-history', getIpHistories);
-router.get('/ip-history/:id', getIpHistory);
+router.get('/ip-history/:ipAddress', getIpHistory);
 router.post('/ip-history/create', createIpHistory);
-router.put('/ip-history/update/:id', updateIpHistory);
-router.delete('/ip-history/delete/:id', deleteIpHistory);
+router.put('/ip-history/update/:ipAddress', updateIpHistory);
+router.delete('/ip-history/delete/:ipAddress', deleteIpHistory);
 
 // Square Payment API Routes
 router.post('/payments', createPayment);

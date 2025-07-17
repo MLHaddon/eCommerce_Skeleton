@@ -16,10 +16,9 @@ export const getCustomer = async (req, res) => {
   try {
     const customer = await Customers.findOne({
       where: { id: req.params.id },
-      attributes: ['id', 'firstName', 'lastName', 'email', 'address', 'cartItems', 'lastLogin', 'ipHistory', 'totalOrders', 'totalSpent']
-    });
+        });
     if (!customer) return res.status(404).json({ message: "Customer not found" });
-    res.json(customer);
+    res.status(200).json({message: "Customer found", customer});
   } catch (error) {
     console.error('Error in getCustomer:', error);
     res.status(500).json({ message: "Internal server error" });
@@ -54,21 +53,11 @@ export const updateCustomer = async (req, res) => {
   try {
     const customer = await Customers.findOne({
       where: { id: req.body.id },
-      attributes: ['id', 'firstName', 'lastName', 'email', 'address', 'cartItems', 'lastLogin', 'ipHistory', 'totalOrders', 'totalSpent']
+      attributes: req.body
     });
     if (!customer) return res.status(404).json({ message: "Customer not found" });
-    const { firstName, lastName, email, address, cartItems, lastLogin, ipHistory, totalOrders, totalSpent } = req.body;
-    const updatedCustomer = await Customers.update({
-      firstName,
-      lastName,
-      email,
-      address,
-      cartItems,
-      lastLogin,
-      ipHistory,
-      totalOrders,
-      totalSpent
-    }, {
+    const data = req.body;
+    const updatedCustomer = await Customers.update(data, {
       where: { id: req.body.id }
     });
     res.status(200).json({ message: "Customer updated successfully", updatedCustomer });
@@ -91,6 +80,6 @@ export const deleteCustomer = async (req, res) => {
     res.status(200).json({ message: "Customer deleted successfully" });
   } catch (error) {
     console.error('Error in Customer deletion: ', error);
-    res.error(500).json ({message: "Internal Server Error Deleting Customer", error});
+    res.status(500).json ({message: "Internal Server Error Deleting Customer", error});
   }
 };

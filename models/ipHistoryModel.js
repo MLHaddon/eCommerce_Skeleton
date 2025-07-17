@@ -3,15 +3,20 @@ import db from '../config/Database.js';
 
 const { DataTypes } = Sequelize;
 
-const IpHistory = db.define('ipHistories', {
+const IpHistories = db.define('iphistories', {
     ipAddress: {
-        type: DataTypes.STRING
+        type: DataTypes.STRING,
+        unique: true,
+        allowNull: false
     },
     lastLogin: {
-        type: DataTypes.DATE
+        type: DataTypes.DATE,
+        allowNull: false
     },
     cartItems: {
-        type: DataTypes.JSON
+        type: DataTypes.JSON, // or TEXT if you're storing as JSON string
+        allowNull: true,
+        defaultValue: []
     }
 }, {
     freezeTableName: true
@@ -21,4 +26,4 @@ const IpHistory = db.define('ipHistories', {
     await db.sync();
 })();
 
-export default IpHistory;
+export default IpHistories;
